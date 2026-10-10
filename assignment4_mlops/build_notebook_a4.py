@@ -1,0 +1,136 @@
+"""
+Builder script to generate notebook_a4.ipynb for Assignment 4.
+"""
+
+import json
+
+notebook = {
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# Assignment 4: Build an MLOps Pipeline for Your GNN\n",
+                "\n",
+                "## 1. Overview and Architecture\n",
+                "This assignment establishes a production-grade, reproducible, tracked, and deployable GNN pipeline.\n",
+                "\n",
+                "### Key Components:\n",
+                "1. **Untracked Baseline**: Demonstrates the failure modes of unversioned scripts.\n",
+                "2. **Experiment Tracking**: MLflow tracking across 3 distinct runs (parameters, seeds, metrics, artifacts).\n",
+                "3. **Model Packaging & Reload Consistency**: Serialization of state dict, feature schemas, and bitwise reload verification.\n",
+                "4. **FastAPI Service & Failure Handling**: Serving existing nodes, unseen nodes, and catching bad schemas.\n",
+                "5. **Model Registry & Promotion Gate**: Enforcing a strict validation improvement threshold and blocking regressions.\n",
+                "6. **Drift Detection**: Monitoring graph degree shift and embedding cosine distance.\n",
+                "7. **Automated Rollback & CI/CD**: Demonstrating production restoration and GitHub Actions workflows."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 1,
+            "metadata": {},
+            "source": [
+                "import os\n",
+                "import sys\n",
+                "sys.path.insert(0, r\"D:\\gnn-practical-assignments\")\n",
+                "\n",
+                "import pytest\n",
+                "from assignment4_mlops.tracking.train_tracked import run_all_experiments\n",
+                "from assignment4_mlops.tracking.registry_gate import demonstrate_registry_gate\n",
+                "from assignment4_mlops.monitoring.drift_detector import run_drift_demonstration\n",
+                "from assignment4_mlops.tracking.rollback_demo import rollback_production\n",
+                "print(\"Assignment 4 environment loaded.\")"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2. MLflow Experiment Tracking & Packaging\n",
+                "We execute 3 tracked experiments, record hyperparameter metrics to SQLite MLflow, and package the artifacts."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "source": [
+                "run_all_experiments()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 3. Model Registry & Validation Gate\n",
+                "We test the promotion gate: automatic promotion of the baseline and blocking of regressive candidate models."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "source": [
+                "demonstrate_registry_gate()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 4. API Endpoints, Edge Cases & Consistency Tests\n",
+                "We run the full pytest suite verifying prediction consistency, isolated nodes, and schema validation."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 4,
+            "metadata": {},
+            "source": [
+                "pytest.main([\"-v\", \"-s\", r\"D:\\gnn-practical-assignments\\assignment4_mlops\\tests\\test_api.py\"])"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 5. Drift Monitoring (Graph Structure & Embeddings)\n",
+                "We compare in-distribution snapshots against out-of-distribution batches and monitor degree shift and cosine distance."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 5,
+            "metadata": {},
+            "source": [
+                "run_drift_demonstration()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 6. Automated Rollback Simulation\n",
+                "We demonstrate rolling back production to the previous known stable version."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 6,
+            "metadata": {},
+            "source": [
+                "rollback_production()"
+            ]
+        }
+    ],
+    "metadata": {
+        "language_info": {"name": "python"}
+    },
+    "nbformat": 4,
+    "nbformat_minor": 4
+}
+
+with open(r"D:\gnn-practical-assignments\assignment4_mlops\notebook_a4.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook, f, indent=2)
+
+print("notebook_a4.ipynb generated successfully.")

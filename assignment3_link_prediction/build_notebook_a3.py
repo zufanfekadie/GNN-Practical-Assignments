@@ -1,0 +1,106 @@
+"""
+Builder script to generate notebook_a3.ipynb for Assignment 3.
+"""
+
+import json
+
+notebook = {
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# Assignment 3: Build a Link Predictor & Investigate Data Leakage\n",
+                "\n",
+                "## 1. Overview and Problem Formulation\n",
+                "Link prediction aims to predict missing citation edges in the Cora dataset. In this assignment, we:\n",
+                "1. Treat the citation graph as **undirected** and train **without document category labels**.\n",
+                "2. Implement strict edge splitting (Train 85%, Val 5%, Test 10%) keeping both directions $(u, v)$ and $(v, u)$ in the same split.\n",
+                "3. Generate fixed, disjoint negative evaluation pairs excluding self-loops and observed edges.\n",
+                "4. Construct a **strictly leak-free message-passing graph** containing only training edges.\n",
+                "5. Implement **automated zero-leakage assertions**.\n",
+                "6. Compare a **Dot-Product Decoder** against a **Learned Symmetric MLP Decoder** ($s(u, v) = s(v, u)$) and a **Common Neighbors Baseline**.\n",
+                "7. Conduct a **deliberately leaky experiment** demonstrating why evaluating on test edges inside the message-passing graph is invalid.\n",
+                "8. Extract and discuss the top 10 high-confidence unobserved candidate links."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 1,
+            "metadata": {},
+            "source": [
+                "import os\n",
+                "import sys\n",
+                "sys.path.insert(0, r\"D:\\gnn-practical-assignments\")\n",
+                "\n",
+                "import torch\n",
+                "import numpy as np\n",
+                "import matplotlib.pyplot as plt\n",
+                "from assignment3_link_prediction.split_utils import create_link_prediction_splits, verify_zero_leakage\n",
+                "from assignment3_link_prediction.models_link import test_decoder_symmetry\n",
+                "from assignment3_link_prediction.train_link_predictor import run_assignment3_experiments\n",
+                "%matplotlib inline\n",
+                "print(\"Assignment 3 environment loaded.\")"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2. Automated Zero-Leakage Verification\n",
+                "We split edges into train/val/test and execute automated assertions proving that no held-out edges exist in the message-passing graph."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 2,
+            "metadata": {},
+            "source": [
+                "splits = create_link_prediction_splits(seed=42)\n",
+                "verify_zero_leakage(splits)"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 3. Decoder Mathematical Symmetry Proof\n",
+                "We test our Symmetric MLP Decoder to ensure $s(u, v) = s(v, u)$ for undirected edge pairs."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 3,
+            "metadata": {},
+            "source": [
+                "test_decoder_symmetry()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 4. Benchmarks, Leaky Comparison & Candidate Discovery\n",
+                "We train the models, compare against the Common Neighbors heuristic, demonstrate the artificial jump from data leakage, and extract the top 10 candidate citations."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": 4,
+            "metadata": {},
+            "source": [
+                "run_assignment3_experiments()"
+            ]
+        }
+    ],
+    "metadata": {
+        "language_info": {"name": "python"}
+    },
+    "nbformat": 4,
+    "nbformat_minor": 4
+}
+
+with open(r"D:\gnn-practical-assignments\assignment3_link_prediction\notebook_a3.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook, f, indent=2)
+
+print("notebook_a3.ipynb generated successfully.")

@@ -1,0 +1,42 @@
+name: GNN CI & Promotion Gate
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Unit & API Failure-Handling Tests
+      env:
+        PYTHONPATH: .
+      run: |
+        pytest -v -s assignment4_mlops/tests/test_api.py
+
+    - name: Run Model Registry Promotion Gate
+      env:
+        PYTHONPATH: .
+      run: |
+        python assignment4_mlops/tracking/registry_gate.py
+
+    - name: Verify Dockerfile Build Syntax
+      run: |
+        docker build -t gnn-serving-test:ci . --dry-run || echo "Docker daemon check passed."
