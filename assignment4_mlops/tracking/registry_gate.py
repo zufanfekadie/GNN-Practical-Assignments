@@ -4,11 +4,20 @@ Model Registry and Validation Gate for Assignment 4.
 Defines the explicit gate policy:
 - Metric: Validation Macro F1
 - Threshold delta: +0.002
-- First-model behavior: Promotes automatically as initial baseline
+- Absolute quality floor: 0.75 (applies to ALL models, including the first!)
+- First-model behavior: Promotes automatically as initial baseline IF meeting quality floor
 - Tie behavior: Rejects candidate (preserves approved production model)
 - Regression behavior: Blocks promotion and logs warning
 - Missing-metric behavior: Hard failure / blocks promotion
 """
+
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly with the play button
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 import os
 import json
@@ -43,6 +52,15 @@ def evaluate_promotion_gate(candidate_name: str, threshold_delta: float = 0.002)
     if candidate_metric is None:
         return {"decision": "REJECTED", "reason": "Missing required metric 'val_macro_f1'"}
 
+    # Absolute Quality Floor Check (applies to ALL models, including the first!)
+    MIN_QUALITY_FLOOR = 0.75
+    if candidate_metric < MIN_QUALITY_FLOOR:
+        return {
+            "decision": "REJECTED",
+            "reason": f"Candidate validation score ({candidate_metric:.4f}) failed minimum quality floor ({MIN_QUALITY_FLOOR}).",
+            "candidate": candidate_name,
+        }
+
     registry = load_registry()
     current_approved = registry["approved_model"]
 
@@ -51,7 +69,7 @@ def evaluate_promotion_gate(candidate_name: str, threshold_delta: float = 0.002)
         promote_to_production(candidate_name, candidate_schema)
         decision = {
             "decision": "PROMOTED",
-            "reason": "First model in registry - automatically promoted as production baseline.",
+            "reason": f"First model in registry meeting quality floor ({MIN_QUALITY_FLOOR}) - promoted as production baseline.",
             "candidate": candidate_name,
             "metric": candidate_metric,
         }
@@ -84,7 +102,7 @@ def evaluate_promotion_gate(candidate_name: str, threshold_delta: float = 0.002)
             "candidate": candidate_name,
             "current_production": current_approved["candidate"],
         }
-    else:
+    else:  # Insufficient Gain (0 < diff < threshold_delta)
         return {
             "decision": "REJECTED",
             "reason": f"Improvement ({diff:+.4f}) fell below required threshold (+{threshold_delta}).",
