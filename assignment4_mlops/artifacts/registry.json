@@ -1,16 +1,28 @@
 {
   "approved_model": {
-    "decision": "PROMOTED",
-    "reason": "First model in registry meeting quality floor (0.75) - promoted as production baseline.",
+    "decision": "ROLLED_BACK",
     "candidate": "model_v1_baseline",
-    "metric": 0.7981759346631297
+    "reason": "Manual/Automated rollback triggered from model_v1_baseline to model_v1_baseline",
+    "metric": 0.7982
   },
   "history": [
+    {
+      "decision": "PROMOTED",
+      "candidate": "model_v1_baseline",
+      "metric": 0.7982,
+      "reason": "Previous stable approved model"
+    },
     {
       "decision": "PROMOTED",
       "reason": "First model in registry meeting quality floor (0.75) - promoted as production baseline.",
       "candidate": "model_v1_baseline",
       "metric": 0.7981759346631297
+    },
+    {
+      "decision": "ROLLED_BACK",
+      "candidate": "model_v1_baseline",
+      "reason": "Manual/Automated rollback triggered from model_v1_baseline to model_v1_baseline",
+      "metric": 0.7982
     }
   ]
 }

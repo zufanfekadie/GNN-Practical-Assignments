@@ -13,6 +13,14 @@ Validates:
 9. Prediction Consistency: Bitwise agreement between offline PyTorch and API output.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly with the play button
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import pytest
 import torch
 import torch.nn.functional as F
