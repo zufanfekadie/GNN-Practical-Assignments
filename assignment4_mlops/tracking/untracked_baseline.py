@@ -11,6 +11,14 @@ Limitations of this untracked baseline:
 4. No gatekeeper: Regressive models can be deployed into production without validation checks.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly with the play button
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import torch
 import torch.nn.functional as F
 from assignment2_architectures.dataset_cora import load_cora_dataset

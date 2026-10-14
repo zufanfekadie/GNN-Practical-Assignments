@@ -9,6 +9,14 @@ Evaluates:
 5. Extracts and analyzes 10 high-scoring unobserved citation candidates.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly with the play button
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import torch
 import torch.nn as nn
 import numpy as np

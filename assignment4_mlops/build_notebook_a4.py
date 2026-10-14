@@ -1,5 +1,5 @@
 """
-Builder script to generate notebook_a4.ipynb for Assignment 4.
+Builder script to generate notebook_a4.ipynb for Assignment 4 with valid schema.
 """
 
 import json
@@ -27,8 +27,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 1,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "import os\n",
                 "import sys\n",
@@ -52,8 +53,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 2,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "run_all_experiments()"
             ]
@@ -68,8 +70,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 3,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "demonstrate_registry_gate()"
             ]
@@ -84,8 +87,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 4,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "pytest.main([\"-v\", \"-s\", r\"D:\\gnn-practical-assignments\\assignment4_mlops\\tests\\test_api.py\"])"
             ]
@@ -100,8 +104,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 5,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "run_drift_demonstration()"
             ]
@@ -116,8 +121,9 @@ notebook = {
         },
         {
             "cell_type": "code",
-            "execution_count": 6,
+            "execution_count": None,
             "metadata": {},
+            "outputs": [],
             "source": [
                 "rollback_production()"
             ]
@@ -133,4 +139,4 @@ notebook = {
 with open(r"D:\gnn-practical-assignments\assignment4_mlops\notebook_a4.ipynb", "w", encoding="utf-8") as f:
     json.dump(notebook, f, indent=2)
 
-print("notebook_a4.ipynb generated successfully.")
+print("notebook_a4.ipynb updated with valid schema.")

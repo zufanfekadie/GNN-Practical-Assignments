@@ -1,0 +1,21 @@
+{
+  "model_architecture": "GCNClassifier",
+  "in_channels": 1433,
+  "hidden_channels": 64,
+  "out_channels": 7,
+  "dropout": 0.5,
+  "class_names": [
+    "Case_Based",
+    "Genetic_Algorithms",
+    "Neural_Networks",
+    "Probabilistic_Methods",
+    "Reinforcement_Learning",
+    "Rule_Learning",
+    "Theory"
+  ],
+  "preprocessing": "feature_normalization_l1",
+  "dataset_hash": "1a213087243c",
+  "val_macro_f1": 0.7981759346631297,
+  "test_accuracy": 0.827,
+  "run_id": "11d6399148a94103ae708f93b0837a3b"
+}

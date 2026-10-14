@@ -3,6 +3,14 @@ Test 1 for Assignment 1:
 Verify one node's output from one GCN layer against an explicit manual calculation.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly from any folder or play button
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import torch
 import torch.nn.functional as F
 from assignment1_from_scratch.gcn_scratch import GCNLayerScratch, normalize_adjacency

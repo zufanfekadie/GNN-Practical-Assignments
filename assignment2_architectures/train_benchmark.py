@@ -8,6 +8,14 @@ Evaluates MLP, GCN, GraphSAGE, and GAT across 3 random seeds:
 - Reports Mean +/- Std across seeds.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly with the play button
+project_root = Path(__file__).resolve().parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import time
 import copy
 import torch

@@ -4,6 +4,14 @@ Verify permutation equivariance: consistently reordering nodes, features,
 and connections produces correspondingly reordered predictions.
 """
 
+import sys
+from pathlib import Path
+
+# Add project root to sys.path so the file can be run directly from any folder or play button
+project_root = Path(__file__).resolve().parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import torch
 from assignment1_from_scratch.dataset import generate_synthetic_graph
 from assignment1_from_scratch.gcn_scratch import GCN2LayerScratch
