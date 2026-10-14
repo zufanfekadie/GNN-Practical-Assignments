@@ -16,7 +16,15 @@ Features:
 """
 
 import os
+import sys
 import json
+from pathlib import Path
+
+# Ensure project root is in sys.path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import torch
 import torch.nn.functional as F
 from fastapi import FastAPI, HTTPException, status
@@ -173,3 +181,12 @@ def predict(request: InferenceRequest):
         predictions=predictions,
         warnings=warnings if warnings else None,
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+    print("=" * 70)
+    print("Starting GNN FastAPI Server on http://127.0.0.1:8000")
+    print("Interactive Swagger UI: http://127.0.0.1:8000/docs")
+    print("=" * 70)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
